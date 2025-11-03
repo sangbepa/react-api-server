@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/esgseeddb
+    username: esgseed
+    password: esgseed1234
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: create       # create / update / none 중 선택 가능
+    show-sql: true           # SQL문 콘솔 출력
+    properties:
+      hibernate:
+        format_sql: true     # SQL 예쁘게 포맷
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false      # 권장: 성능 최적화
+  
+  sql:
+    init:
+      mode: always           # schema.sql, data.sql 자동 실행
