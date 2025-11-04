@@ -1,5 +1,10 @@
 package store.esgseed.api.emission.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import store.esgseed.api.common.Messenger;
@@ -12,8 +17,9 @@ import java.util.List;
  * 배출량 API 컨트롤러
  * Controller는 DTO만 사용
  */
+@Tag(name = "Emission API", description = "배출량 데이터 관리 API")
 @RestController
-@RequestMapping("/api/emissions")
+@RequestMapping("emissions")
 @RequiredArgsConstructor
 public class EmissionController {
 
@@ -23,8 +29,14 @@ public class EmissionController {
      * 배출량 데이터 생성
      * POST /api/emissions
      */
+    @Operation(summary = "배출량 데이터 생성", description = "새로운 배출량 데이터를 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "생성 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    })
     @PostMapping
-    public Messenger<EmissionDTO> create(@RequestBody EmissionDTO dto) {
+    public Messenger<EmissionDTO> create(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "생성할 배출량 데이터", required = true) @RequestBody EmissionDTO dto) {
         EmissionDTO response = emissionService.create(dto);
         return Messenger.created("배출량 데이터가 생성되었습니다.", response);
     }
@@ -33,8 +45,14 @@ public class EmissionController {
      * ID로 배출량 데이터 조회
      * GET /api/emissions/{id}
      */
+    @Operation(summary = "배출량 데이터 조회", description = "ID로 특정 배출량 데이터를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "데이터 없음")
+    })
     @GetMapping("/{id}")
-    public Messenger<EmissionDTO> getById(@PathVariable Long id) {
+    public Messenger<EmissionDTO> getById(
+            @Parameter(description = "조회할 배출량 데이터 ID", required = true) @PathVariable Long id) {
         EmissionDTO response = emissionService.getById(id);
         return Messenger.ok(response);
     }
@@ -44,8 +62,11 @@ public class EmissionController {
      * GET /api/emissions
      * GET /api/emissions?site=삼성
      */
+    @Operation(summary = "배출량 데이터 목록 조회", description = "모든 배출량 데이터를 조회하거나 사업장명으로 검색합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping
-    public Messenger<List<EmissionDTO>> getAll(@RequestParam(required = false) String site) {
+    public Messenger<List<EmissionDTO>> getAll(
+            @Parameter(description = "검색할 사업장명 (선택)", required = false) @RequestParam(required = false) String site) {
         List<EmissionDTO> responses = site != null
                 ? emissionService.searchBySite(site)
                 : emissionService.getAll();
@@ -56,8 +77,15 @@ public class EmissionController {
      * 배출량 데이터 수정
      * PUT /api/emissions/{id}
      */
+    @Operation(summary = "배출량 데이터 수정", description = "기존 배출량 데이터를 수정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "수정 성공"),
+            @ApiResponse(responseCode = "404", description = "데이터 없음")
+    })
     @PutMapping("/{id}")
-    public Messenger<EmissionDTO> update(@PathVariable Long id, @RequestBody EmissionDTO dto) {
+    public Messenger<EmissionDTO> update(
+            @Parameter(description = "수정할 배출량 데이터 ID", required = true) @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수정할 배출량 데이터", required = true) @RequestBody EmissionDTO dto) {
         EmissionDTO response = emissionService.update(id, dto);
         return Messenger.ok("배출량 데이터가 수정되었습니다.", response);
     }
@@ -66,8 +94,14 @@ public class EmissionController {
      * 배출량 데이터 삭제
      * DELETE /api/emissions/{id}
      */
+    @Operation(summary = "배출량 데이터 삭제", description = "ID로 특정 배출량 데이터를 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "삭제 성공"),
+            @ApiResponse(responseCode = "404", description = "데이터 없음")
+    })
     @DeleteMapping("/{id}")
-    public Messenger<Void> delete(@PathVariable Long id) {
+    public Messenger<Void> delete(
+            @Parameter(description = "삭제할 배출량 데이터 ID", required = true) @PathVariable Long id) {
         emissionService.delete(id);
         return Messenger.noContent("배출량 데이터가 삭제되었습니다.");
     }

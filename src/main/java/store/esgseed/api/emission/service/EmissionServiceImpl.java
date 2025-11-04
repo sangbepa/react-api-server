@@ -7,10 +7,13 @@ import store.esgseed.api.emission.domain.EmissionDTO;
 import store.esgseed.api.emission.domain.EmissionEntity;
 import store.esgseed.api.emission.repository.EmissionRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 배출량 서비스 구현체
+ * String 타입으로 통일하여 처리
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,10 +27,10 @@ public class EmissionServiceImpl implements EmissionService {
         // DTO -> Entity 변환
         EmissionEntity entity = EmissionEntity.builder()
                 .site(dto.getSite())
-                .scope1Tco2e(convertToBigDecimal(dto.getScope1Tco2e()))
-                .scope2Tco2e(convertToBigDecimal(dto.getScope2Tco2e()))
-                .totalScope12Tco2e(convertToBigDecimal(dto.getTotalScope12Tco2e()))
-                .scope3Tco2e(convertToBigDecimal(dto.getScope3Tco2e()))
+                .scope1Tco2e(dto.getScope1Tco2e())
+                .scope2Tco2e(dto.getScope2Tco2e())
+                .totalScope12Tco2e(dto.getTotalScope12Tco2e())
+                .scope3Tco2e(dto.getScope3Tco2e())
                 .build();
 
         EmissionEntity saved = emissionRepository.save(entity);
@@ -65,10 +68,10 @@ public class EmissionServiceImpl implements EmissionService {
 
         // DTO -> Entity 업데이트
         entity.setSite(dto.getSite());
-        entity.setScope1Tco2e(convertToBigDecimal(dto.getScope1Tco2e()));
-        entity.setScope2Tco2e(convertToBigDecimal(dto.getScope2Tco2e()));
-        entity.setTotalScope12Tco2e(convertToBigDecimal(dto.getTotalScope12Tco2e()));
-        entity.setScope3Tco2e(convertToBigDecimal(dto.getScope3Tco2e()));
+        entity.setScope1Tco2e(dto.getScope1Tco2e());
+        entity.setScope2Tco2e(dto.getScope2Tco2e());
+        entity.setTotalScope12Tco2e(dto.getTotalScope12Tco2e());
+        entity.setScope3Tco2e(dto.getScope3Tco2e());
 
         // Entity -> DTO 변환
         return convertToDTO(entity);
@@ -87,16 +90,10 @@ public class EmissionServiceImpl implements EmissionService {
     private EmissionDTO convertToDTO(EmissionEntity entity) {
         return EmissionDTO.builder()
                 .site(entity.getSite())
-                .scope1Tco2e(entity.getScope1Tco2e() != null ? entity.getScope1Tco2e().doubleValue() : null)
-                .scope2Tco2e(entity.getScope2Tco2e() != null ? entity.getScope2Tco2e().doubleValue() : null)
-                .totalScope12Tco2e(
-                        entity.getTotalScope12Tco2e() != null ? entity.getTotalScope12Tco2e().doubleValue() : null)
-                .scope3Tco2e(entity.getScope3Tco2e() != null ? entity.getScope3Tco2e().doubleValue() : null)
+                .scope1Tco2e(entity.getScope1Tco2e())
+                .scope2Tco2e(entity.getScope2Tco2e())
+                .totalScope12Tco2e(entity.getTotalScope12Tco2e())
+                .scope3Tco2e(entity.getScope3Tco2e())
                 .build();
-    }
-
-    // Double -> BigDecimal 변환
-    private BigDecimal convertToBigDecimal(Double value) {
-        return value == null ? BigDecimal.ZERO : BigDecimal.valueOf(value);
     }
 }
