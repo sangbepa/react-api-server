@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.esgseed.api.stadium.domain.StadiumDTO;
-import store.esgseed.api.stadium.domain.StadiumEntity;
+import store.esgseed.api.stadium.domain.Stadium;
 import store.esgseed.api.stadium.repository.StadiumRepository;
 
 import java.util.List;
@@ -23,22 +23,22 @@ public class StadiumServiceImpl implements StadiumService {
     @Override
     @Transactional
     public StadiumDTO create(StadiumDTO dto) {
-        StadiumEntity entity = StadiumEntity.builder()
+        Stadium entity = Stadium.builder()
                 .stadiumName(dto.getStadiumName())
-                .homeTeamId(dto.getHomeTeamId())
+                .hometeamId(dto.getHomeTeamId())
                 .seatCount(dto.getSeatCount())
                 .address(dto.getAddress())
                 .ddd(dto.getDdd())
                 .tel(dto.getTel())
                 .build();
 
-        StadiumEntity saved = stadiumRepository.save(entity);
+        Stadium saved = stadiumRepository.save(entity);
         return convertToDTO(saved);
     }
 
     @Override
     public StadiumDTO getById(Long id) {
-        StadiumEntity entity = stadiumRepository.findById(id)
+        Stadium entity = stadiumRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("경기장 데이터를 찾을 수 없습니다. ID: " + id));
         return convertToDTO(entity);
     }
@@ -59,7 +59,7 @@ public class StadiumServiceImpl implements StadiumService {
 
     @Override
     public List<StadiumDTO> getByHomeTeam(Long homeTeamId) {
-        return stadiumRepository.findByHomeTeamId(homeTeamId).stream()
+        return stadiumRepository.findByHometeamId(homeTeamId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -67,11 +67,11 @@ public class StadiumServiceImpl implements StadiumService {
     @Override
     @Transactional
     public StadiumDTO update(Long id, StadiumDTO dto) {
-        StadiumEntity entity = stadiumRepository.findById(id)
+        Stadium entity = stadiumRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("경기장 데이터를 찾을 수 없습니다. ID: " + id));
 
         entity.setStadiumName(dto.getStadiumName());
-        entity.setHomeTeamId(dto.getHomeTeamId());
+        entity.setHometeamId(dto.getHomeTeamId());
         entity.setSeatCount(dto.getSeatCount());
         entity.setAddress(dto.getAddress());
         entity.setDdd(dto.getDdd());
@@ -89,11 +89,11 @@ public class StadiumServiceImpl implements StadiumService {
         stadiumRepository.deleteById(id);
     }
 
-    private StadiumDTO convertToDTO(StadiumEntity entity) {
+    private StadiumDTO convertToDTO(Stadium entity) {
         return StadiumDTO.builder()
-                .stadiumId(entity.getStadiumId())
+                .stadiumId(entity.getId())
                 .stadiumName(entity.getStadiumName())
-                .homeTeamId(entity.getHomeTeamId())
+                .homeTeamId(entity.getHometeamId())
                 .seatCount(entity.getSeatCount())
                 .address(entity.getAddress())
                 .ddd(entity.getDdd())

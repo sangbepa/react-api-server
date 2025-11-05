@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.esgseed.api.player.domain.PlayerDTO;
-import store.esgseed.api.player.domain.PlayerEntity;
+import store.esgseed.api.player.domain.Player;
 import store.esgseed.api.player.repository.PlayerRepository;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional
     public PlayerDTO create(PlayerDTO dto) {
-        PlayerEntity entity = PlayerEntity.builder()
+        Player entity = Player.builder()
                 .playerName(dto.getPlayerName())
                 .ePlayerName(dto.getEPlayerName())
                 .nickname(dto.getNickname())
@@ -37,13 +37,13 @@ public class PlayerServiceImpl implements PlayerService {
                 .weight(dto.getWeight())
                 .build();
 
-        PlayerEntity saved = playerRepository.save(entity);
+        Player saved = playerRepository.save(entity);
         return convertToDTO(saved);
     }
 
     @Override
     public PlayerDTO getById(Long id) {
-        PlayerEntity entity = playerRepository.findById(id)
+        Player entity = playerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("선수 데이터를 찾을 수 없습니다. ID: " + id));
         return convertToDTO(entity);
     }
@@ -72,7 +72,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     @Transactional
     public PlayerDTO update(Long id, PlayerDTO dto) {
-        PlayerEntity entity = playerRepository.findById(id)
+        Player entity = playerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("선수 데이터를 찾을 수 없습니다. ID: " + id));
 
         entity.setPlayerName(dto.getPlayerName());
@@ -99,9 +99,9 @@ public class PlayerServiceImpl implements PlayerService {
         playerRepository.deleteById(id);
     }
 
-    private PlayerDTO convertToDTO(PlayerEntity entity) {
+    private PlayerDTO convertToDTO(Player entity) {
         return PlayerDTO.builder()
-                .playerId(entity.getPlayerId())
+                .playerId(entity.getId())
                 .playerName(entity.getPlayerName())
                 .ePlayerName(entity.getEPlayerName())
                 .nickname(entity.getNickname())

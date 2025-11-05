@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.esgseed.api.team.domain.TeamDTO;
-import store.esgseed.api.team.domain.TeamEntity;
+import store.esgseed.api.team.domain.Team;
 import store.esgseed.api.team.repository.TeamRepository;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional
     public TeamDTO create(TeamDTO dto) {
-        TeamEntity entity = TeamEntity.builder()
+        Team entity = Team.builder()
                 .regionName(dto.getRegionName())
                 .teamName(dto.getTeamName())
                 .eTeamName(dto.getETeamName())
@@ -38,13 +38,13 @@ public class TeamServiceImpl implements TeamService {
                 .owner(dto.getOwner())
                 .build();
 
-        TeamEntity saved = teamRepository.save(entity);
+        Team saved = teamRepository.save(entity);
         return convertToDTO(saved);
     }
 
     @Override
     public TeamDTO getById(Long id) {
-        TeamEntity entity = teamRepository.findById(id)
+        Team entity = teamRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id));
         return convertToDTO(entity);
     }
@@ -73,7 +73,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     @Transactional
     public TeamDTO update(Long id, TeamDTO dto) {
-        TeamEntity entity = teamRepository.findById(id)
+        Team entity = teamRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id));
 
         entity.setRegionName(dto.getRegionName());
@@ -101,9 +101,9 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.deleteById(id);
     }
 
-    private TeamDTO convertToDTO(TeamEntity entity) {
+    private TeamDTO convertToDTO(Team entity) {
         return TeamDTO.builder()
-                .teamId(entity.getTeamId())
+                .teamId(entity.getId())
                 .regionName(entity.getRegionName())
                 .teamName(entity.getTeamName())
                 .eTeamName(entity.getETeamName())

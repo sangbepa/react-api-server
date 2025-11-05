@@ -2,13 +2,13 @@ package store.esgseed.api.emission.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import store.esgseed.api.emission.domain.EmissionEntity;
+import store.esgseed.api.emission.domain.Emission;
 
 import java.util.List;
 
 @Repository
-public interface EmissionRepository extends JpaRepository<EmissionEntity, Long> {
+public interface EmissionRepository extends JpaRepository<Emission, Long> {
     
-    List<EmissionEntity> findBySiteContaining(String site);
+    List<Emission> findBySiteContaining(String site);
 }
 

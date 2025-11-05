@@ -2,20 +2,20 @@ package store.esgseed.api.schedule.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import store.esgseed.api.schedule.domain.ScheduleEntity;
+import store.esgseed.api.schedule.domain.Schedule;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface ScheduleRepository extends JpaRepository<ScheduleEntity, Long> {
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     
-    List<ScheduleEntity> findByScheDate(LocalDate scheDate);
+    List<Schedule> findByScheDate(LocalDate scheDate);
     
-    List<ScheduleEntity> findByHomeTeamId(Long homeTeamId);
+    List<Schedule> findByHometeamId(Long hometeamId);
     
-    List<ScheduleEntity> findByAwayTeamId(Long awayTeamId);
+    List<Schedule> findByAwayteamId(Long awayteamId);
     
-    List<ScheduleEntity> findByGubun(String gubun);
+    List<Schedule> findByGubun(String gubun);
 }
 

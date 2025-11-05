@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.esgseed.api.emission.domain.EmissionDTO;
-import store.esgseed.api.emission.domain.EmissionEntity;
+import store.esgseed.api.emission.domain.Emission;
 import store.esgseed.api.emission.repository.EmissionRepository;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class EmissionServiceImpl implements EmissionService {
     @Transactional
     public EmissionDTO create(EmissionDTO dto) {
         // DTO -> Entity 변환
-        EmissionEntity entity = EmissionEntity.builder()
+        Emission entity = Emission.builder()
                 .site(dto.getSite())
                 .scope1Tco2e(dto.getScope1Tco2e())
                 .scope2Tco2e(dto.getScope2Tco2e())
@@ -33,7 +33,7 @@ public class EmissionServiceImpl implements EmissionService {
                 .scope3Tco2e(dto.getScope3Tco2e())
                 .build();
 
-        EmissionEntity saved = emissionRepository.save(entity);
+        Emission saved = emissionRepository.save(entity);
 
         // Entity -> DTO 변환
         return convertToDTO(saved);
@@ -41,7 +41,7 @@ public class EmissionServiceImpl implements EmissionService {
 
     @Override
     public EmissionDTO getById(Long id) {
-        EmissionEntity entity = emissionRepository.findById(id)
+        Emission entity = emissionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("배출량 데이터를 찾을 수 없습니다. ID: " + id));
         return convertToDTO(entity);
     }
@@ -63,7 +63,7 @@ public class EmissionServiceImpl implements EmissionService {
     @Override
     @Transactional
     public EmissionDTO update(Long id, EmissionDTO dto) {
-        EmissionEntity entity = emissionRepository.findById(id)
+        Emission entity = emissionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("배출량 데이터를 찾을 수 없습니다. ID: " + id));
 
         // DTO -> Entity 업데이트
@@ -87,7 +87,7 @@ public class EmissionServiceImpl implements EmissionService {
     }
 
     // Entity -> DTO 변환
-    private EmissionDTO convertToDTO(EmissionEntity entity) {
+    private EmissionDTO convertToDTO(Emission entity) {
         return EmissionDTO.builder()
                 .site(entity.getSite())
                 .scope1Tco2e(entity.getScope1Tco2e())
