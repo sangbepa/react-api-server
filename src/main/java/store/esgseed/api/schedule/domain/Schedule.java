@@ -18,7 +18,6 @@ import java.time.LocalDate;
 public class Schedule {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     
     private String stadiumUk; // Schedule의 PK
