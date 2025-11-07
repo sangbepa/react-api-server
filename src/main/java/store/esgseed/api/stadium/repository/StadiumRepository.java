@@ -11,5 +11,5 @@ public interface StadiumRepository extends JpaRepository<Stadium, Long> {
 
     List<Stadium> findByStadiumNameContaining(String stadiumName);
 
-    List<Stadium> findByHometeamId(Long hometeamId);
+    List<Stadium> findByHometeamUk(String hometeamUk);
 }

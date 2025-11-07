@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import store.esgseed.api.stadium.domain.Stadium;
 
-import java.time.LocalDate;
-
 /**
  * 일정 엔티티 - 데이터베이스 테이블과 매핑
  */
@@ -18,15 +16,15 @@ import java.time.LocalDate;
 public class Schedule {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    
-    private String stadiumUk; // Schedule의 PK
-    private LocalDate scheDate;
+    private String stadiumUk; // Schedule의 uk
+    private String scheDate;
     private String gubun;
-    private Long hometeamId;
-    private Long awayteamId;
-    private Integer homeScore;
-    private Integer awayScore;
+    private String hometeamUk;
+    private String awayteamUk;
+    private String homeScore;
+    private String awayScore;
 
     // Stadium과의 다대일 연관관계 (Stadium이 부모)
     @ManyToOne(fetch = FetchType.LAZY)

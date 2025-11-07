@@ -19,12 +19,11 @@ public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    
     private String teamUk;
     private String regionName;
     private String teamName;
     private String eTeamName;
-    private Integer origYyyy;
+    private String origYyyy;
     private String zipCode1;
     private String zipCode2;
     private String address;

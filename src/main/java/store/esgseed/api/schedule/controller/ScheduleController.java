@@ -6,13 +6,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import store.esgseed.api.common.Messenger;
 import store.esgseed.api.schedule.domain.ScheduleDTO;
 import store.esgseed.api.schedule.service.ScheduleService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -58,18 +56,18 @@ public class ScheduleController {
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping
     public Messenger<List<ScheduleDTO>> getAll(
-            @Parameter(description = "검색할 날짜 (선택, YYYY-MM-DD)", required = false)
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @Parameter(description = "검색할 팀 ID (선택)", required = false)
-            @RequestParam(required = false) Long teamId,
+            @Parameter(description = "검색할 날짜 (선택, YYYYMMDD)", required = false)
+            @RequestParam(required = false) String date,
+            @Parameter(description = "검색할 팀 고유키 (선택)", required = false)
+            @RequestParam(required = false) String teamUk,
             @Parameter(description = "경기 구분 (선택)", required = false)
             @RequestParam(required = false) String gubun) {
         List<ScheduleDTO> responses;
 
         if (date != null) {
             responses = scheduleService.getByDate(date);
-        } else if (teamId != null) {
-            responses = scheduleService.getByTeam(teamId);
+        } else if (teamUk != null) {
+            responses = scheduleService.getByTeam(teamUk);
         } else if (gubun != null) {
             responses = scheduleService.getByGubun(gubun);
         } else {

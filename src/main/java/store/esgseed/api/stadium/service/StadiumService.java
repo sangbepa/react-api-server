@@ -14,7 +14,7 @@ public interface StadiumService {
 
     List<StadiumDTO> searchByName(String stadiumName);
 
-    List<StadiumDTO> getByHomeTeam(Long homeTeamId);
+    List<StadiumDTO> getByHomeTeam(String homeTeamUk);
 
     StadiumDTO update(Long id, StadiumDTO dto);
 

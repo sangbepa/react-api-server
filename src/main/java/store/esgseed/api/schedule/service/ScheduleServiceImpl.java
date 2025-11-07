@@ -7,7 +7,6 @@ import store.esgseed.api.schedule.domain.ScheduleDTO;
 import store.esgseed.api.schedule.domain.Schedule;
 import store.esgseed.api.schedule.repository.ScheduleRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,10 +25,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     public ScheduleDTO create(ScheduleDTO dto) {
         Schedule entity = Schedule.builder()
+                .stadiumUk(dto.getStadiumUk())
                 .scheDate(dto.getScheDate())
                 .gubun(dto.getGubun())
-                .hometeamId(dto.getHomeTeamId())
-                .awayteamId(dto.getAwayTeamId())
+                .hometeamUk(dto.getHomeTeamUk())
+                .awayteamUk(dto.getAwayTeamUk())
                 .homeScore(dto.getHomeScore())
                 .awayScore(dto.getAwayScore())
                 .build();
@@ -53,16 +53,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public List<ScheduleDTO> getByDate(LocalDate scheDate) {
+    public List<ScheduleDTO> getByDate(String scheDate) {
         return scheduleRepository.findByScheDate(scheDate).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ScheduleDTO> getByTeam(Long teamId) {
-        List<Schedule> homeGames = scheduleRepository.findByHometeamId(teamId);
-        List<Schedule> awayGames = scheduleRepository.findByAwayteamId(teamId);
+    public List<ScheduleDTO> getByTeam(String teamUk) {
+        List<Schedule> homeGames = scheduleRepository.findByHometeamUk(teamUk);
+        List<Schedule> awayGames = scheduleRepository.findByAwayteamUk(teamUk);
 
         return Stream.concat(homeGames.stream(), awayGames.stream())
                 .map(this::convertToDTO)
@@ -82,10 +82,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule entity = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정 데이터를 찾을 수 없습니다. ID: " + id));
 
+        entity.setStadiumUk(dto.getStadiumUk());
         entity.setScheDate(dto.getScheDate());
         entity.setGubun(dto.getGubun());
-        entity.setHometeamId(dto.getHomeTeamId());
-        entity.setAwayteamId(dto.getAwayTeamId());
+        entity.setHometeamUk(dto.getHomeTeamUk());
+        entity.setAwayteamUk(dto.getAwayTeamUk());
         entity.setHomeScore(dto.getHomeScore());
         entity.setAwayScore(dto.getAwayScore());
 
@@ -104,10 +105,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     private ScheduleDTO convertToDTO(Schedule entity) {
         return ScheduleDTO.builder()
                 .id(entity.getId())
+                .stadiumUk(entity.getStadiumUk())
                 .scheDate(entity.getScheDate())
                 .gubun(entity.getGubun())
-                .homeTeamId(entity.getHometeamId())
-                .awayTeamId(entity.getAwayteamId())
+                .homeTeamUk(entity.getHometeamUk())
+                .awayTeamUk(entity.getAwayteamUk())
                 .homeScore(entity.getHomeScore())
                 .awayScore(entity.getAwayScore())
                 .build();

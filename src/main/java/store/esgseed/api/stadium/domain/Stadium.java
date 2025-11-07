@@ -15,11 +15,12 @@ import lombok.*;
 public class Stadium {
 
     @Id
-    private String stadiumId; 
-    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    private String stadiumUk; // Stadium의 uk
     private String stadiumName;
-    private Long hometeamId; // FK 아님, 정보용
-    private Integer seatCount;
+    private String hometeamUk; // FK 아님, 정보용
+    private String seatCount;
     private String address;
     private String ddd;
     private String tel;

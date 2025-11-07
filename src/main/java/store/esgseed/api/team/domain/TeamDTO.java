@@ -17,6 +17,9 @@ public class TeamDTO {
     @Schema(description = "팀 ID", example = "1")
     private Long teamId;
 
+    @Schema(description = "팀 고유키", example = "K01")
+    private String teamUk;
+
     @Schema(description = "연고지명", example = "서울")
     private String regionName;
 
@@ -27,7 +30,7 @@ public class TeamDTO {
     private String eTeamName;
 
     @Schema(description = "창단년도", example = "1983")
-    private Integer origYyyy;
+    private String origYyyy;
 
     @Schema(description = "우편번호1", example = "121")
     private String zipCode1;

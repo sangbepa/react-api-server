@@ -2,7 +2,6 @@ package store.esgseed.api.schedule.service;
 
 import store.esgseed.api.schedule.domain.ScheduleDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface ScheduleService {
@@ -13,9 +12,9 @@ public interface ScheduleService {
 
     List<ScheduleDTO> getAll();
 
-    List<ScheduleDTO> getByDate(LocalDate scheDate);
+    List<ScheduleDTO> getByDate(String scheDate);
 
-    List<ScheduleDTO> getByTeam(Long teamId);
+    List<ScheduleDTO> getByTeam(String teamUk);
 
     List<ScheduleDTO> getByGubun(String gubun);
 

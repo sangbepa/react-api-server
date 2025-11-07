@@ -24,6 +24,8 @@ public class PlayerServiceImpl implements PlayerService {
     @Transactional
     public PlayerDTO create(PlayerDTO dto) {
         Player entity = Player.builder()
+                .playerUk(dto.getPlayerUk())
+                .teamUk(dto.getTeamUk())
                 .playerName(dto.getPlayerName())
                 .ePlayerName(dto.getEPlayerName())
                 .nickname(dto.getNickname())
@@ -75,6 +77,8 @@ public class PlayerServiceImpl implements PlayerService {
         Player entity = playerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("선수 데이터를 찾을 수 없습니다. ID: " + id));
 
+        entity.setPlayerUk(dto.getPlayerUk());
+        entity.setTeamUk(dto.getTeamUk());
         entity.setPlayerName(dto.getPlayerName());
         entity.setEPlayerName(dto.getEPlayerName());
         entity.setNickname(dto.getNickname());
@@ -102,6 +106,8 @@ public class PlayerServiceImpl implements PlayerService {
     private PlayerDTO convertToDTO(Player entity) {
         return PlayerDTO.builder()
                 .playerId(entity.getId())
+                .playerUk(entity.getPlayerUk())
+                .teamUk(entity.getTeamUk())
                 .playerName(entity.getPlayerName())
                 .ePlayerName(entity.getEPlayerName())
                 .nickname(entity.getNickname())

@@ -24,8 +24,9 @@ public class StadiumServiceImpl implements StadiumService {
     @Transactional
     public StadiumDTO create(StadiumDTO dto) {
         Stadium entity = Stadium.builder()
+                .stadiumUk(dto.getStadiumUk())
                 .stadiumName(dto.getStadiumName())
-                .hometeamId(dto.getHomeTeamId())
+                .hometeamUk(dto.getHomeTeamUk())
                 .seatCount(dto.getSeatCount())
                 .address(dto.getAddress())
                 .ddd(dto.getDdd())
@@ -58,8 +59,8 @@ public class StadiumServiceImpl implements StadiumService {
     }
 
     @Override
-    public List<StadiumDTO> getByHomeTeam(Long homeTeamId) {
-        return stadiumRepository.findByHometeamId(homeTeamId).stream()
+    public List<StadiumDTO> getByHomeTeam(String homeTeamUk) {
+        return stadiumRepository.findByHometeamUk(homeTeamUk).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -70,8 +71,9 @@ public class StadiumServiceImpl implements StadiumService {
         Stadium entity = stadiumRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("경기장 데이터를 찾을 수 없습니다. ID: " + id));
 
+        entity.setStadiumUk(dto.getStadiumUk());
         entity.setStadiumName(dto.getStadiumName());
-        entity.setHometeamId(dto.getHomeTeamId());
+        entity.setHometeamUk(dto.getHomeTeamUk());
         entity.setSeatCount(dto.getSeatCount());
         entity.setAddress(dto.getAddress());
         entity.setDdd(dto.getDdd());
@@ -92,8 +94,9 @@ public class StadiumServiceImpl implements StadiumService {
     private StadiumDTO convertToDTO(Stadium entity) {
         return StadiumDTO.builder()
                 .stadiumId(entity.getId())
+                .stadiumUk(entity.getStadiumUk())
                 .stadiumName(entity.getStadiumName())
-                .homeTeamId(entity.getHometeamId())
+                .homeTeamUk(entity.getHometeamUk())
                 .seatCount(entity.getSeatCount())
                 .address(entity.getAddress())
                 .ddd(entity.getDdd())

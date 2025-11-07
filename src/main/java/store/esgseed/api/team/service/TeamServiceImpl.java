@@ -24,6 +24,7 @@ public class TeamServiceImpl implements TeamService {
     @Transactional
     public TeamDTO create(TeamDTO dto) {
         Team entity = Team.builder()
+                .teamUk(dto.getTeamUk())
                 .regionName(dto.getRegionName())
                 .teamName(dto.getTeamName())
                 .eTeamName(dto.getETeamName())
@@ -76,6 +77,7 @@ public class TeamServiceImpl implements TeamService {
         Team entity = teamRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id));
 
+        entity.setTeamUk(dto.getTeamUk());
         entity.setRegionName(dto.getRegionName());
         entity.setTeamName(dto.getTeamName());
         entity.setETeamName(dto.getETeamName());
@@ -104,6 +106,7 @@ public class TeamServiceImpl implements TeamService {
     private TeamDTO convertToDTO(Team entity) {
         return TeamDTO.builder()
                 .teamId(entity.getId())
+                .teamUk(entity.getTeamUk())
                 .regionName(entity.getRegionName())
                 .teamName(entity.getTeamName())
                 .eTeamName(entity.getETeamName())

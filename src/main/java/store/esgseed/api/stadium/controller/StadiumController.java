@@ -58,14 +58,14 @@ public class StadiumController {
     public Messenger<List<StadiumDTO>> getAll(
             @Parameter(description = "검색할 경기장명 (선택)", required = false)
             @RequestParam(required = false) String name,
-            @Parameter(description = "검색할 홈팀 ID (선택)", required = false)
-            @RequestParam(required = false) Long homeTeamId) {
+            @Parameter(description = "검색할 홈팀 고유키 (선택)", required = false)
+            @RequestParam(required = false) String homeTeamUk) {
         List<StadiumDTO> responses;
 
         if (name != null) {
             responses = stadiumService.searchByName(name);
-        } else if (homeTeamId != null) {
-            responses = stadiumService.getByHomeTeam(homeTeamId);
+        } else if (homeTeamUk != null) {
+            responses = stadiumService.getByHomeTeam(homeTeamUk);
         } else {
             responses = stadiumService.getAll();
         }
