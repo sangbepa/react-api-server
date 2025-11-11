@@ -1,0 +1,126 @@
+package store.esgseed.api.soccer.team.service;
+
+import lombok.RequiredArgsConstructor;
+import store.esgseed.api.soccer.team.domain.Team;
+import store.esgseed.api.soccer.team.domain.TeamDTO;
+import store.esgseed.api.soccer.team.repository.TeamRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 팀 서비스 구현체
+ */
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class TeamServiceImpl implements TeamService {
+
+    private final TeamRepository teamRepository;
+
+    @Override
+    @Transactional
+    public TeamDTO create(TeamDTO dto) {
+        Team entity = Team.builder()
+                .teamUk(dto.getTeamUk())
+                .regionName(dto.getRegionName())
+                .teamName(dto.getTeamName())
+                .eTeamName(dto.getETeamName())
+                .origYyyy(dto.getOrigYyyy())
+                .zipCode1(dto.getZipCode1())
+                .zipCode2(dto.getZipCode2())
+                .address(dto.getAddress())
+                .ddd(dto.getDdd())
+                .tel(dto.getTel())
+                .fax(dto.getFax())
+                .homepage(dto.getHomepage())
+                .owner(dto.getOwner())
+                .build();
+
+        Team saved = teamRepository.save(entity);
+        return convertToDTO(saved);
+    }
+
+    @Override
+    public TeamDTO getById(Long id) {
+        Team entity = teamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id));
+        return convertToDTO(entity);
+    }
+
+    @Override
+    public List<TeamDTO> getAll() {
+        return teamRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeamDTO> searchByName(String teamName) {
+        return teamRepository.findByTeamNameContaining(teamName).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeamDTO> getByRegion(String regionName) {
+        return teamRepository.findByRegionName(regionName).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public TeamDTO update(Long id, TeamDTO dto) {
+        Team entity = teamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id));
+
+        entity.setTeamUk(dto.getTeamUk());
+        entity.setRegionName(dto.getRegionName());
+        entity.setTeamName(dto.getTeamName());
+        entity.setETeamName(dto.getETeamName());
+        entity.setOrigYyyy(dto.getOrigYyyy());
+        entity.setZipCode1(dto.getZipCode1());
+        entity.setZipCode2(dto.getZipCode2());
+        entity.setAddress(dto.getAddress());
+        entity.setDdd(dto.getDdd());
+        entity.setTel(dto.getTel());
+        entity.setFax(dto.getFax());
+        entity.setHomepage(dto.getHomepage());
+        entity.setOwner(dto.getOwner());
+
+        return convertToDTO(entity);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        if (!teamRepository.existsById(id)) {
+            throw new IllegalArgumentException("팀 데이터를 찾을 수 없습니다. ID: " + id);
+        }
+        teamRepository.deleteById(id);
+    }
+
+    private TeamDTO convertToDTO(Team entity) {
+        return TeamDTO.builder()
+                .teamId(entity.getId())
+                .teamUk(entity.getTeamUk())
+                .regionName(entity.getRegionName())
+                .teamName(entity.getTeamName())
+                .eTeamName(entity.getETeamName())
+                .origYyyy(entity.getOrigYyyy())
+                .zipCode1(entity.getZipCode1())
+                .zipCode2(entity.getZipCode2())
+                .address(entity.getAddress())
+                .ddd(entity.getDdd())
+                .tel(entity.getTel())
+                .fax(entity.getFax())
+                .homepage(entity.getHomepage())
+                .owner(entity.getOwner())
+                .build();
+    }
+}
+
