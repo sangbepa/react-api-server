@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   config-server:
     build:
-      context: ./configuration
+      context: ./server/config-service
       dockerfile: Dockerfile
     container_name: config-server
     ports:
@@ -22,7 +20,7 @@ services:
 
   eureka-server:
     build:
-      context: ./eureka
+      context: ./server/eureka-service
       dockerfile: Dockerfile
     container_name: eureka-server
     ports:
@@ -40,7 +38,7 @@ services:
 
   gateway-server:
     build:
-      context: ./gateway
+      context: ./server/gateway-service
       dockerfile: Dockerfile
     container_name: gateway-server
     ports:
@@ -55,7 +53,7 @@ services:
 
   common-service:
     build:
-      context: ./services/common-service
+      context: ./service/common-service
       dockerfile: Dockerfile
     container_name: common-service
     ports:
@@ -70,7 +68,7 @@ services:
 
   soccer-service:
     build:
-      context: ./services/soccer-service
+      context: ./service/soccer-service
       dockerfile: Dockerfile
     container_name: soccer-service
     ports:
@@ -85,7 +83,7 @@ services:
 
   user-service:
     build:
-      context: ./services/user-service
+      context: ./service/user-service
       dockerfile: Dockerfile
     container_name: user-service
     ports:
